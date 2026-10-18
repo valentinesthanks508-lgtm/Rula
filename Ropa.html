@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROPA - Catálogo</title>
+
+  <style>
+    /* =========================================
+       ESTILOS GENERALES
+       ========================================= */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .subcategoria-header {
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    .btn-volver {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #2c3e50;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .btn-volver:hover {
+      text-decoration: underline;
+    }
+
+    .productos-container {
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .product-card h3 {
+      font-size: 1.1rem;
+      margin: 12px 0 6px 0;
+      color: #2c3e50;
+    }
+
+    .product-card .precio {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #27ae60;
+      margin-bottom: 12px;
+    }
+
+    .btn-comprar {
+      background-color: #2c3e50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+
+    .btn-comprar:hover {
+      background-color: #1a252f;
+    }
+
+    /* =========================================
+       ESTILOS DEL CARRITO FLOTANTE Y PANEL LATERAL
+       ========================================= */
+
+    .cart-float-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background-color: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .cart-float-btn:hover {
+      transform: scale(1.08);
+      background-color: #1a252f;
+    }
+
+    .cart-float-btn svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background-color: #e74c3c;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 1001;
+    }
+
+    .cart-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -360px;
+      width: 340px;
+      height: 100%;
+      background-color: #ffffff;
+      box-shadow: -4px 0 15px rgba(0,0,0,0.15);
+      z-index: 1002;
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    .cart-drawer.open {
+      right: 0;
+    }
+
+    .cart-header {
+      padding: 16px 20px;
+      background-color: #2c3e50;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-header h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .btn-close-cart {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .cart-body {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .cart-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .cart-item-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .cart-item-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 4px;
+    }
+
+    .cart-item-price {
+      font-size: 0.85rem;
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .cart-item-qty {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .btn-qty {
+      background: #e0e0e0;
+      border: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-remove {
+      background: none;
+      border: none;
+      color: #e74c3c;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .cart-footer {
+      padding: 15px 20px;
+      border-top: 1px solid #e0e0e0;
+      background-color: #f8f9fa;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .btn-checkout {
+      width: 100%;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn-checkout:hover {
+      background-color: #219150;
+    }
+
+    .cart-empty-msg {
+      text-align: center;
+      color: #7f8c8d;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ENCABEZADO Y BOTÓN DE REGRESO -->
+  <header class="subcategoria-header">
+    <a href="index.html" class="btn-volver">&larr; Volver al Inicio</a>
+    <h1 style="color: #2c3e50;">ROPA</h1>
+  </header>
+
+  <!-- GRILLA DE PRODUCTOS -->
+  <main class="productos-container">
+    <div class="products-grid">
+      
+      <!-- Producto 1 -->
+      <div class="product-card">
+        <img src="Imagenes/ropa/Imagen 6.png" alt="Remera Casual *Varios Colores* / Diseño 'COFFE'">
+        <h3>Remera Casual *Varios Colores* / Diseño 'COFFE'</h3>
+        <p class="precio">$25.000</p>
+        <button class="btn-comprar" onclick="agregarAlCarrito(101, 'Remera Casual *Varios Colores* / Diseño \'COFFE\'', 25000, 'Imagenes/ropa/Imagen 6.png')">Comprar / Ver detalle</button>
+      </div>
+
+      <!-- Producto 2 -->
+      <div class="product-card">
+        <img src="Imagenes/ropa/Imagen 4.2.png" alt="Pantalón OverSide *Varios Colores*">
+        <h3>Pantalón OverSide *Varios Colores*</h3>
+        <p class="precio">$45.000</p>
+        <button class="btn-comprar" onclick="agregarAlCarrito(102, 'Pantalón OverSide *Varios Colores*', 45000, 'Imagenes/ropa/Imagen 4.2.png')">Comprar / Ver detalle</button>
+      </div>
+
+      <!-- Producto 3 -->
+      <div class="product-card">
+        <img src="Imagenes/ropa/Imagen 7.png" alt="Remera Casual *Varios Colores* / Diseño 'VINO'">
+        <h3>Remera Casual *Varios Colores* / Diseño 'VINO'</h3>
+        <p class="precio">$60.000</p>
+        <button class="btn-comprar" onclick="agregarAlCarrito(103, 'Remera Casual *Varios Colores* / Diseño \'VINO\'', 60000, 'Imagenes/ropa/Imagen 7.png')">Comprar / Ver detalle</button>
+
+    </div>
+  </main>
+
+  <!-- BOTÓN FLOTANTE Y PANEL DEL CARRITO -->
+  <button class="cart-float-btn" onclick="toggleCartDrawer()" aria-label="Ver carrito">
+    <svg viewBox="0 0 24 24">
+      <circle cx="9" cy="21" r="1"></circle>
+      <circle cx="20" cy="21" r="1"></circle>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+    </svg>
+    <span class="cart-badge" id="cart-count">0</span>
+  </button>
+
+  <div class="cart-overlay" id="cart-overlay" onclick="toggleCartDrawer()"></div>
+
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h2>Mi Carrito</h2>
+      <button class="btn-close-cart" onclick="toggleCartDrawer()">&times;</button>
+    </div>
+    <div class="cart-body" id="cart-items-container"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cart-total-price">$0</span>
+      </div>
+      <button class="btn-checkout" onclick="checkoutWhatsApp()">Finalizar Compra</button>
+    </div>
+  </aside>
+
+  <!-- SCRIPT -->
+  <script>
+    let cart = JSON.parse(localStorage.getItem('rula_cart')) || [];
+
+    function toggleCartDrawer() {
+      document.getElementById('cart-drawer').classList.toggle('open');
+      document.getElementById('cart-overlay').classList.toggle('active');
+    }
+
+    function agregarAlCarrito(id, name, price, img) {
+      const existingItem = cart.find(item => item.id === id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ id, name, price, img, quantity: 1 });
+      }
+      guardarYActualizar();
+      document.getElementById('cart-drawer').classList.add('open');
+      document.getElementById('cart-overlay').classList.add('active');
+    }
+
+    function cambiarCantidad(id, cambio) {
+      const item = cart.find(i => i.id === id);
+      if (item) {
+        item.quantity += cambio;
+        if (item.quantity <= 0) {
+          cart = cart.filter(i => i.id !== id);
+        }
+      }
+      guardarYActualizar();
+    }
+
+    function eliminarItem(id) {
+      cart = cart.filter(i => i.id !== id);
+      guardarYActualizar();
+    }
+
+    function guardarYActualizar() {
+      localStorage.setItem('rula_cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cart-items-container');
+      const countBadge = document.getElementById('cart-count');
+      const totalSpan = document.getElementById('cart-total-price');
+
+      container.innerHTML = '';
+      let total = 0;
+      let totalCount = 0;
+
+      if (cart.length === 0) {
+        container.innerHTML = '<p class="cart-empty-msg">Tu carrito está vacío.</p>';
+      } else {
+        cart.forEach(item => {
+          total += item.price * item.quantity;
+          totalCount += item.quantity;
+
+          const itemEl = document.createElement('div');
+          itemEl.className = 'cart-item';
+          itemEl.innerHTML = `
+            <img src="${item.img}" alt="${item.name}">
+            <div class="cart-item-info">
+              <div class="cart-item-title">${item.name}</div>
+              <div class="cart-item-price">$${item.price.toLocaleString('es-AR')}</div>
+              <div class="cart-item-qty">
+                <button class="btn-qty" onclick="cambiarCantidad(${item.id}, -1)">-</button>
+                <span>${item.quantity}</span>
+                <button class="btn-qty" onclick="cambiarCantidad(${item.id}, 1)">+</button>
+              </div>
+            </div>
+            <button class="btn-remove" onclick="eliminarItem(${item.id})" title="Eliminar">&times;</button>
+          `;
+          container.appendChild(itemEl);
+        });
+      }
+
+      countBadge.textContent = totalCount;
+      totalSpan.textContent = `$${total.toLocaleString('es-AR')}`;
+    }
+
+    function checkoutWhatsApp() {
+      if (cart.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+      }
+      let mensaje = '¡Hola! Quisiera realizar el siguiente pedido:\n\n';
+      let total = 0;
+      cart.forEach(item => {
+        mensaje += `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toLocaleString('es-AR')}\n`;
+        total += item.price * item.quantity;
+      });
+      
+      mensaje += `\n*Total: $${total.toLocaleString('es-AR')}*`;
+      
+      const telefono = '+5493446642109'; // Reemplazar por tu número
+      window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCart);
+  </script>
+    <!-- PIE DE PÁGINA CON FIRMA -->
+<footer class="dev-footer">
+  <p>Desarrollado por <strong> @UDGAVEEDICIONES </strong> &copy; 2026</p>
+  
+</footer>
+
+<style>
+  .dev-footer {
+    text-align: center;
+    padding: 20px 10px;
+    margin-top: 40px;
+    border-top: 1px solid #e0e0e0;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    background-color: #ffffff;
+  }
+  .dev-footer strong {
+    color: #2c3e50;
+  }
+</style>
+</body>
+</html>
