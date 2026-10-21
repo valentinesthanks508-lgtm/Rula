@@ -217,27 +217,29 @@
 
         /* --- UBICACIÓN --- */
         .location-container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             text-align: center;
         }
 
-        .map-placeholder {
-            width: 100%;
-            height: 300px;
-            background: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: #666;
-            border-radius: 6px;
+        .wsp-btn {
+            display: inline-block;
             margin-top: 1rem;
-            margin-bottom: 1rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .wsp-btn:hover {
+            background-color: #128C7E;
         }
 
         /* --- CARRITO (MODAL) --- */
@@ -333,6 +335,20 @@
         .overlay.active {
             display: block;
         }
+
+        .dev-footer {
+            text-align: center;
+            padding: 20px 10px;
+            margin-top: 40px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            background-color: #ffffff;
+        }
+
+        .dev-footer strong {
+            color: #2c3e50;
+        }
     </style>
 </head>
 <body>
@@ -344,7 +360,7 @@
             <ul>
                 <li><a class="nav-link active" onclick="switchSection('inicio', event)">Inicio</a></li>
                 <li><a class="nav-link" onclick="switchSection('productos', event)">Productos</a></li>
-                <li><a class="nav-link" onclick="switchSection('ubicación y contacto', event)">Ubicación y Contacto</a></li>
+                <li><a class="nav-link" onclick="switchSection('ubicacion-contacto', event)">Ubicación y Contacto</a></li>
             </ul>
         </nav>
         <button class="cart-btn" onclick="toggleCart()">🛒 Carrito (<span id="cart-count">0</span>)</button>
@@ -414,34 +430,31 @@
             </a>
         </div>
     </section>
-<!-- SECCIÓN UBICACIÓN Y CONTACTO -->
-<section id="ubicacion-contacto" class="section" style="
-    background-image: url('https://files.catbox.moe/9yq6qj.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: 3rem 1rem;
-">
-    <div class="location-container" style="
-        background-color: rgba(255, 255, 255, 0.9); 
-        padding: 2rem; 
-        border-radius: 10px; 
-        max-width: 600px; 
-        margin: 0 auto;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    <!-- SECCIÓN UBICACIÓN Y CONTACTO -->
+    <section id="ubicacion-contacto" class="section" style="
+        background-image: url('https://files.catbox.moe/9yq6qj.webp');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 4rem 1rem;
     ">
-        <h2 style="color: #2c3e50; margin-bottom: 0.5rem;">Visítanos en nuestra tienda física</h2>
-        <p>Te esperamos para asesorarte con las mejores combinaciones.</p>
-        
-        <div style="margin: 1.5rem 0; font-weight: bold; color: #e74c3c;">
-            📍 GUALEGUAYCHÚ, ENTRE RÍOS, ARGENTINA. | ENVÍOS A TODO EL PAÍS
+        <div class="location-container">
+            <h2 style="color: #2c3e50; margin-bottom: 0.5rem;">Visítanos en nuestra tienda física</h2>
+            <p>Te esperamos para asesorarte con las mejores combinaciones.</p>
+            
+            <div style="margin: 1.5rem 0; font-weight: bold; color: #e74c3c;">
+                📍 GUALEGUAYCHÚ, ENTRE RÍOS, ARGENTINA. | ENVÍOS A TODO EL PAÍS
+            </div>
+            
+            <p><strong>Horarios:</strong> Lunes a Sábados de 09:00hs a 12:30 y 17:00 a 20:00</p>
+            <p style="margin-top: 0.5rem;"><strong>Contacto:</strong> +54 9 3446 642109</p>
+
+            <a href="https://wa.me/5493446642109?text=Hola!%20Quisiera%20pedir%20la%20ubicación%20exacta%20de%20la%20tienda" target="_blank" class="wsp-btn">
+                📱 Solicitar Ubicación por WhatsApp
+            </a>
         </div>
-        
-        <p><strong>Dirección:</strong> Ubicación por WhatsApp</p>
-        <p><strong>Horarios:</strong> Lunes a Sábados de 09:00hs a 12:30 y 17:00 a 20:00</p>
-        <p><strong>Contacto:</strong> +54 9 3446 642109</p>
-    </div>
-</section>
+    </section>
 
     <!-- CARRITO DE COMPRAS (MODAL) -->
     <div class="overlay" id="overlay" onclick="toggleCart()"></div>
@@ -581,25 +594,10 @@
             }
         });
     </script>
-    <!-- PIE DE PÁGINA CON FIRMA -->
-<footer class="dev-footer">
-  <p>Desarrollado por <strong> @UDGAVEEDICIONES </strong> &copy; 2026</p>
-  
-</footer>
 
-<style>
-  .dev-footer {
-    text-align: center;
-    padding: 20px 10px;
-    margin-top: 40px;
-    border-top: 1px solid #e0e0e0;
-    font-size: 0.85rem;
-    color: #7f8c8d;
-    background-color: #ffffff;
-  }
-  .dev-footer strong {
-    color: #2c3e50;
-  }
-</style>
+    <!-- PIE DE PÁGINA CON FIRMA -->
+    <footer class="dev-footer">
+        <p>Desarrollado por <strong> @UDGAVEEDICIONES </strong> &copy; 2026</p>
+    </footer>
 </body>
 </html>
