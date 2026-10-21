@@ -304,6 +304,20 @@
       color: #7f8c8d;
       margin-top: 40px;
     }
+
+    .dev-footer {
+      text-align: center;
+      padding: 20px 10px;
+      margin-top: 40px;
+      border-top: 1px solid #e0e0e0;
+      font-size: 0.85rem;
+      color: #7f8c8d;
+      background-color: #ffffff;
+    }
+
+    .dev-footer strong {
+      color: #2c3e50;
+    }
   </style>
 </head>
 <body>
@@ -323,7 +337,7 @@
         <img src="https://files.catbox.moe/90brbf.png" alt="Remera Casual *Varios Colores* / Diseño 'COFFE'">
         <h3>Remera Casual *Varios Colores* / Diseño 'COFFE'</h3>
         <p class="precio">$25.000</p>
-        <button class="btn-comprar" onclick="agregarAlCarrito(101, 'Remera Casual *Varios Colores* / Diseño \'COFFE\'', 25000, 'Imagenes/ropa/Imagen 6.png')">Comprar / Ver detalle</button>
+        <button class="btn-comprar" onclick="agregarAlCarrito(101, 'Remera Casual *Varios Colores* / Diseño \'COFFE\'', 25000, 'https://files.catbox.moe/90brbf.png')">Comprar / Ver detalle</button>
       </div>
 
       <!-- Producto 2 -->
@@ -331,7 +345,7 @@
         <img src="https://files.catbox.moe/grul88.png" alt="Pantalón OverSide *Varios Colores*">
         <h3>Pantalón OverSide *Varios Colores*</h3>
         <p class="precio">$45.000</p>
-        <button class="btn-comprar" onclick="agregarAlCarrito(102, 'Pantalón OverSide *Varios Colores*', 45000, 'Imagenes/ropa/Imagen 4.2.png')">Comprar / Ver detalle</button>
+        <button class="btn-comprar" onclick="agregarAlCarrito(102, 'Pantalón OverSide *Varios Colores*', 45000, 'https://files.catbox.moe/grul88.png')">Comprar / Ver detalle</button>
       </div>
 
       <!-- Producto 3 -->
@@ -339,7 +353,8 @@
         <img src="https://files.catbox.moe/4w1553.png" alt="Remera Casual *Varios Colores* / Diseño 'VINO'">
         <h3>Remera Casual *Varios Colores* / Diseño 'VINO'</h3>
         <p class="precio">$60.000</p>
-        <button class="btn-comprar" onclick="agregarAlCarrito(103, 'Remera Casual *Varios Colores* / Diseño \'VINO\'', 60000, 'Imagenes/ropa/Imagen 7.png')">Comprar / Ver detalle</button>
+        <button class="btn-comprar" onclick="agregarAlCarrito(103, 'Remera Casual *Varios Colores* / Diseño \'VINO\'', 60000, 'https://files.catbox.moe/4w1553.png')">Comprar / Ver detalle</button>
+      </div>
 
     </div>
   </main>
@@ -457,7 +472,7 @@
         alert('Tu carrito está vacío');
         return;
       }
-      let mensaje = '¡Hola! Quisiera realizar el siguiente pedido:\n\n';
+      let mensaje = '¡Hola! Quisiera realizar el siguiente pedido desde el catálogo de ROPA:\n\n';
       let total = 0;
       cart.forEach(item => {
         mensaje += `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toLocaleString('es-AR')}\n`;
@@ -466,31 +481,16 @@
       
       mensaje += `\n*Total: $${total.toLocaleString('es-AR')}*`;
       
-      const telefono = '+5493446642109'; // Reemplazar por tu número
+      const telefono = '5493446642109';
       window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
     }
 
     document.addEventListener('DOMContentLoaded', renderCart);
   </script>
-    <!-- PIE DE PÁGINA CON FIRMA -->
-<footer class="dev-footer">
-  <p>Desarrollado por <strong> @UDGAVEEDICIONES </strong> &copy; 2026</p>
-  
-</footer>
 
-<style>
-  .dev-footer {
-    text-align: center;
-    padding: 20px 10px;
-    margin-top: 40px;
-    border-top: 1px solid #e0e0e0;
-    font-size: 0.85rem;
-    color: #7f8c8d;
-    background-color: #ffffff;
-  }
-  .dev-footer strong {
-    color: #2c3e50;
-  }
-</style>
+  <!-- PIE DE PÁGINA CON FIRMA -->
+  <footer class="dev-footer">
+    <p>Desarrollado por <strong> @UDGAVEEDICIONES </strong> &copy; 2026</p>
+  </footer>
 </body>
 </html>
