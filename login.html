@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Login Empleados</title></head>
+<body style="font-family:Arial; display:flex; justify-content:center; align-items:center; height:100vh; background:#f4f4f9; margin:0;">
+    <form id="login-form" style="background:#fff; padding:30px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); width:300px;">
+        <h2 style="margin-top:0;">Acceso Empleados</h2>
+        <p id="error-msg" style="color:red; font-size:13px;"></p>
+        <label>Email:</label><br><input type="email" id="email" required style="width:100%; padding:8px; margin:5px 0 15px; box-sizing:border-box;"><br>
+        <label>Contraseña:</label><br><input type="password" id="password" required style="width:100%; padding:8px; margin:5px 0 15px; box-sizing:border-box;"><br>
+        <button type="submit" style="width:100%; background:#3498db; color:#fff; border:none; padding:10px; cursor:pointer; border-radius:4px;">Entrar</button>
+        <p style="margin-top:15px; text-align:center;"><a href="index.html" style="color:#555;">&larr; Volver al inicio</a></p>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const { data: usuario, error } = await supabaseClient
+                .from('usuarios')
+                .select('*')
+                .eq('email', email)
+                .eq('password', password)
+                .single();
+
+            if (error || !usuario) {
+                document.getElementById('error-msg').textContent = 'Correo o contraseña incorrectos.';
+            } else {
+                localStorage.setItem('empleado_tienda', JSON.stringify(usuario));
+                window.location.href = 'panel.html';
+            }
+        });
+    </script>
+</body>
+</html>
