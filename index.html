@@ -429,6 +429,35 @@
                 </div>
             </a>
         </div>
+                </head>
+<body>
+    <div class="header">
+        
+            <span id="user-info" style="display:none;">Hola, <b id="user-name"></b> | <a href="panel.html" style="color: #f1c40f;">Panel de Gestión</a> | <a href="#" id="logout-btn" style="color: #ff6b6b;">Cerrar Sesión</a></span>
+            <a href="login.html" style= "color: #222;" id="login-link">Acceso Empleados</a>
+        </div>
+  
+<div>
+        
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+    <script>
+        const empleado = JSON.parse(localStorage.getItem('empleado_tienda'));
+        if (empleado) {
+            document.getElementById('user-info').style.display = 'inline';
+            document.getElementById('user-name').textContent = empleado.nombre;
+            document.getElementById('login-link').style.display = 'none';
+        }
+        document.getElementById('logout-btn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('empleado_tienda');
+            window.location.reload();
+        });
+
+        window.addEventListener('DOMContentLoaded', cargarCatalogo);
+    </script>
+</body>
+</html>
     </section>
 
     <!-- SECCIÓN UBICACIÓN Y CONTACTO -->
