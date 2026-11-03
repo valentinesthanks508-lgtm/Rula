@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Subir Prenda</title></head>
+<body style="font-family:Arial; margin:30px;">
+    <script>
+        const empleado = JSON.parse(localStorage.getItem('empleado_tienda'));
+        if (!empleado) window.location.href = 'login.html';
+    </script>
+
+    <h2>Subir Nueva Prenda</h2>
+    <form id="form-subir" style="max-width:400px;">
+        <label>Subcategoría:</label><br>
+        <select id="subcategoria_id" required style="width:100%; padding:8px; margin-bottom:10px;"></select><br>
+
+        <label>Nombre de la prenda:</label><br>
+        <input type="text" id="nombre" required style="width:100%; padding:8px; margin-bottom:10px;"><br>
+
+        <label>Descripción:</label><br>
+        <textarea id="descripcion" rows="3" style="width:100%; padding:8px; margin-bottom:10px;"></textarea><br>
+
+        <label>Precio ($):</label><br>
+        <input type="number" step="0.01" id="precio" required style="width:100%; padding:8px; margin-bottom:10px;"><br>
+
+        <label>Foto:</label><br>
+        <input type="file" id="foto" accept="image/*" required style="margin-bottom:15px;"><br>
+
+        <button type="submit" style="background:#27ae60; color:#fff; padding:10px 15px; border:none; cursor:pointer; border-radius:4px;">Guardar Prenda</button>
+        <a href="panel.html" style="margin-left:15px; color:#555;">Cancelar</a>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+    <script>
+        async function cargarSubcategorias() {
+            const select = document.getElementById('subcategoria_id');
+            const { data: subcategorias } = await supabaseClient.from('subcategorias').select('*, categorias(nombre)');
+            select.innerHTML = '';
+            subcategorias.forEach(sub => {
+                select.innerHTML += `<option value="${sub.id}">${sub.categorias?.nombre} > ${sub.nombre}</option>`;
+            });
+        }
+
+        document.getElementById('form-subir').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('foto').files[0];
+            const nombre = document.getElementById('nombre').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const precio = document.getElementById('precio').value;
+            const subcategoria_id = document.getElementById('subcategoria_id').value;
+
+            const fileName = `${Date.now()}_${fileInput.name}`;
+            const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                .from('fotos_ropa')
+                .upload(fileName, fileInput);
+
+            if (uploadError) {
+                alert('Error al subir la imagen. Asegúrate de haber creado el bucket público fotos_ropa en Supabase.');
+                return;
+            }
+
+            const { data: urlData } = supabaseClient.storage
+                .from('fotos_ropa')
+                .getPublicUrl(fileName);
+
+            const imagen_url = urlData.publicUrl;
+
+            const { error: insertError } = await supabaseClient
+                .from('productos')
+                .insert([{ subcategoria_id, nombre, descripcion, precio, imagen_url }]);
+
+            if (insertError) {
+                alert('Error al guardar el producto');
+            } else {
+                window.location.href = 'panel.html';
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', cargarSubcategorias);
+    </script>
+</body>
+</html>
