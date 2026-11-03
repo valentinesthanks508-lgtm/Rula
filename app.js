@@ -1,5 +1,5 @@
-const SUPABASE_URL = 'TU_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'TU_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://lgtmrula.supabase.co'; // (O la URL larga de tu proyecto que te aparece arriba en Supabase)
+const SUPABASE_ANON_KEY = 'sb_publishable_FGrAI5Nm4Q-E2z6GYrwqeA_dVed0usY';
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Cargar catálogo en index.html
